@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[RU] RUSSIAN-STRIKE-TEAM - Arma Reforger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@700&family=Audiowide&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #f0f0f0;
+            font-family: 'Orbitron', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(184, 134, 11, 0.06) 0%, transparent 25%),
+                linear-gradient(to bottom, #000000, #0a0a0a);
+        }
+
+        .gold-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 10%),
+                radial-gradient(circle at 90% 80%, rgba(184, 134, 11, 0.02) 0%, transparent 10%);
+            opacity: 0.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        /* Секция с логотипом */
+        .logo-section {
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.15),
+                inset 0 0 20px rgba(212, 175, 55, 0.05);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Упрощенный логотип */
+        .logo-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-simple {
+            width: 320px;
+            height: 320px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Золотой шестигранник */
+        .hexagon {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+            clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+            z-index: 1;
+            border: 4px solid #FFD700;
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.4),
+                inset 0 0 40px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Российский флаг внутри */
+        .flag-inside {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+            z-index: 2;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flag-stripe {
+            flex: 1;
+            width: 100%;
+        }
+
+        .stripe-white { background-color: white; }
+        .stripe-blue { background-color: #0066CC; }
+        .stripe-red { background-color: #CC0000; }
+
+        /* Буквы RST - золотые, более внятные */
+        .rst-simple {
+            position: absolute;
+            z-index: 3;
+            font-family: 'Audiowide', sans-serif;
+            font-weight: 900;
+            font-size: 140px;
+            letter-spacing: 15px;
+            color: #FFD700;
+            text-shadow: 
+                0 0 20px #FFD700,
+                0 0 40px rgba(255, 215, 0, 0.7),
+                3px 3px 6px rgba(0, 0, 0, 0.9);
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Эффект свечения вокруг логотипа */
+        .logo-glow {
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: glow-pulse 3s infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes glow-pulse {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* Основной текст */
+        .main-title {
+            text-align: center;
+            margin-top: 20px;
+            z-index: 10;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.9) 0%, rgba(10, 10, 10, 0.9) 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .ru-badge {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            letter-spacing: 6px;
+            color: #FFD700;
+            text-shadow: 
+                0 0 10px rgba(255, 215, 0, 0.7),
+                2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .team-name-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-name-line {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 68px;
+            letter-spacing: 12px;
+            color: #FFFFFF;
+            text-shadow: 
+                2px 2px 0 #B8860B,
+                4px 4px 0 rgba(184, 134, 11, 0.7),
+                0 0 20px rgba(212, 175, 55, 0.5),
+                0 0 40px rgba(184, 134, 11, 0.3);
+            text-transform: uppercase;
+            line-height: 1;
+            position: relative;
+            padding: 0 5px;
+            margin: 0;
+        }
+
+        .team-name-line:nth-child(2) {
+            color: #FFD700;
+            font-size: 72px;
+            letter-spacing: 14px;
+            text-shadow: 
+                2px 2px 0 #8B6914,
+                4px 4px 0 rgba(139, 105, 20, 0.8),
+                0 0 25px rgba(255, 215, 0, 0.7),
+                0 0 50px rgba(212, 175, 55, 0.4);
+        }
+
+        .glow {
+            animation: text-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes text-glow {
+            0% { 
+                opacity: 0.9;
+                text-shadow: 
+                    2px 2px 0 #B8860B,
+                    4px 4px 0 rgba(184, 134, 11, 0.7),
+                    0 0 20px rgba(212, 175, 55, 0.5),
+                    0 0 40px rgba(184, 134, 11, 0.3);
+            }
+            100% { 
+                opacity: 1;
+                text-shadow: 
+                    2px 2px 0 #FFD700,
+                    4px 4px 0 rgba(255, 215, 0, 0.8),
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(212, 175, 55, 0.6),
+                    0 0 80px rgba(184, 134, 11, 0.4);
+            }
+        }
+
+        /* Секция онлайна сервера */
+        .server-status-section {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .server-status-card {
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .server-status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .server-status-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            color: #FFD700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .server-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #00FF00;
+            box-shadow: 0 0 10px #00FF00;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background-color: #FF0000;
+            box-shadow: 0 0 10px #FF0000;
+        }
+
+        .status-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: #00FF00;
+            font-size: 18px;
+        }
+
+        .status-text.offline {
+            color: #FF0000;
+        }
+
+        .server-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .server-info-item {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .info-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #AAAAAA;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 24px;
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+
+        .online-players {
+            margin-top: 10px;
+        }
+
+        .player-count {
+            font-family: 'Audiowide', sans-serif;
+            font-size: 48px;
+            color: #FFD700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            margin: 10px 0;
+        }
+
+        .player-slots {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #AAAAAA;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button {
+            background: linear-gradient(to right, #D4AF37, #FFD700);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .refresh-button:active {
+            transform: translateY(0);
+        }
+
+        .refresh-button.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .refresh-button.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        .error-message {
+            color: #FF6B6B;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        /* Discord секция */
+        .discord-section {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .discord-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            padding: 20px 40px;
+            text-decoration: none;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        .discord-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.15), transparent);
+            transition: 0.5s;
+        }
+
+        .discord-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
+        }
+
+        .discord-link:hover::before {
+            left: 100%;
+        }
+
+        .discord-link i {
+            color: #FFD700;
+            font-size: 32px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+        }
+
+        .discord-link span {
+            background: linear-gradient(to right, #FFF, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+
+        .discord-subtitle {
+            margin-top: 15px;
+            color: #CCCCCC;
+            font-size: 16px;
+            text-align: center;
+            padding: 15px;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            border-left: 3px solid #FFD700;
+            border-right: 3px solid #FFD700;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Социальные сети */
+        .social-section {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .social-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            color: #FFD700;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            text-transform: uppercase;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .social-link:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .social-link i {
+            font-size: 52px;
+            margin-bottom: 15px;
+            color: #FFD700;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+        }
+
+        .social-link span {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: #FFD700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Футер */
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            width: 100%;
+            max-width: 800px;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .logo-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .logo-simple {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .rst-simple {
+                font-size: 100px;
+                letter-spacing: 10px;
+            }
+            
+            .team-name-line {
+                font-size: 48px;
+                letter-spacing: 8px;
+            }
+            
+            .team-name-line:nth-child(2) {
+                font-size: 52px;
+                letter-spacing: 10px;
+            }
+            
+            .ru-badge {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+            
+            .server-status-title {
+                font-size: 24px;
+            }
+            
+            .player-count {
+                font-size: 36px;
+            }
+            
+            .discord-link { font-size: 20px; padding: 15px 25px; }
+            .social-link { width: 120px; height: 120px; }
+            .social-link i { font-size: 42px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .logo-simple {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .rst-simple {
+                font-size: 80px;
+                letter-spacing: 8px;
+            }
+            
+            .team-name-line {
+                font-size: 36px;
+                letter-spacing: 6px;
+            }
+            
+            .team-name-line:nth-child(2) {
+                font-size: 40px;
+                letter-spacing: 8px;
+            }
+            
+            .ru-badge {
+                font-size: 24px;
+                letter-spacing: 3px;
+            }
+            
+            .server-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .server-status-title {
+                font-size: 20px;
+            }
+            
+            .social-links { gap: 20px; }
+            .social-link { width: 100px; height: 100px; }
+            .social-link i { font-size: 36px; margin-bottom: 10px; }
+            .social-link span { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gold-particles"></div>
+    
+    <div class="container">
+        <div class="logo-section">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <div class="logo-simple">
+                    <div class="hexagon"></div>
+                    <div class="flag-inside">
+                        <div class="flag-stripe stripe-white"></div>
+                        <div class="flag-stripe stripe-blue"></div>
+                        <div class="flag-stripe stripe-red"></div>
+                    </div>
+                    <div class="rst-simple">RST</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-title">
+            <div class="ru-badge glow">[RU]</div>
+            <div class="team-name-container">
+                <div class="team-name-line glow">RUSSIAN</div>
+                <div class="team-name-line glow">STRIKE</div>
+                <div class="team-name-line glow">TEAM</div>
+            </div>
+        </div>
+
+        <!-- Секция онлайн-статуса сервера -->
+        <div class="server-status-section">
+            <div class="server-status-card">
+                <div class="server-status-header">
+                    <div class="server-status-title">
+                        <i class="fas fa-server"></i> СТАТУС СЕРВЕРА
+                    </div>
+                    <div class="server-status-indicator">
+                        <div class="status-dot" id="status-dot"></div>
+                        <div class="status-text" id="status-text">ЗАГРУЗКА...</div>
+                    </div>
+                </div>
+                
+                <div class="server-info">
+                    <div class="server-info-item">
+                        <div class="info-label">IP АДРЕС</div>
+                        <div class="info-value" id="server-ip">85.175.218.241</div>
+                    </div>
+                    <div class="server-info-item">
+                        <div class="info-label">ПОРТ</div>
+                        <div class="info-value" id="server-port">2001</div>
+                    </div>
+                    <div class="server-info-item">
+                        <div class="info-label">ВЕРСИЯ</div>
+                        <div class="info-value" id="server-version">Arma Reforger</div>
+                    </div>
+                    <div class="server-info-item">
+                        <div class="info-label">КАРТА</div>
+                        <div class="info-value" id="server-map">Колгуев</div>
+                    </div>
+                </div>
+                
+                <div class="online-players">
+                    <div class="info-label">ИГРОКИ ОНЛАЙН</div>
+                    <div class="player-count">
+                        <span id="online-count">0</span>/<span id="max-players">64</span>
+                    </div>
+                    <div class="player-slots">Слотов свободно: <span id="free-slots">64</span></div>
+                </div>
+                
+                <button class="refresh-button" id="refresh-status">
+                    <i class="fas fa-sync-alt"></i> ОБНОВИТЬ СТАТУС
+                </button>
+            </div>
+        </div>
+
+        <div class="discord-section">
+            <a href="https://discord.gg/mDRmPaJs" target="_blank" class="discord-link">
+                <i class="fab fa-discord"></i>
+                <span>ПРИСОЕДИНЯЙСЯ К НАШЕМУ DISCORD</span>
+            </a>
+            <div class="discord-subtitle">
+                <p>Обсуждай тактики, участвуй в событиях, находи команду для игры на сервере Arma Reforger</p>
+            </div>
+        </div>
+
+        <div class="social-section">
+            <div class="social-title">МЫ В СОЦИАЛЬНЫХ СЕТЯХ</div>
+            <div class="social-links">
+                <a href="https://www.twitch.tv/gb22331" target="_blank" class="social-link">
+                    <i class="fab fa-twitch"></i>
+                    <span>TWITCH</span>
+                </a>
+                <a href="https://www.youtube.com/channel/UCmwhc1KSpR4zL0ZZV4iyIUw" target="_blank" class="social-link">
+                    <i class="fab fa-youtube"></i>
+                    <span>YOUTUBE</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © Игровой сервер [RU] RUSSIAN-STRIKE-TEAM в Arma Reforger
+        <br><small>Статус сервера обновляется автоматически каждые 30 секунд</small>
+        <br><small>Данные предоставляются BattleMetrics</small>
+    </footer>
+
+    <script>
+        // Конфигурация
+        const BATTLEMETRICS_SERVER_ID = '36666205';
+        const BATTLEMETRICS_API_URL = `https://api.battlemetrics.com/servers/${BATTLEMETRICS_SERVER_ID}`;
+        
+        // Функция для получения данных сервера из BattleMetrics
+        async function fetchServerData() {
+            try {
+                const response = await fetch(BATTLEMETRICS_API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Ошибка при получении данных сервера:', error);
+                throw error;
+            }
+        }
+        
+        // Функция для парсинга данных из BattleMetrics
+        function parseBattleMetricsData(data) {
+            const attributes = data.data.attributes;
+            
+            // Определяем статус сервера
+            const isOnline = attributes.status === 'online';
+            
+            // Получаем информацию о карте и версии из details
+            const details = attributes.details || {};
+            // Всегда показываем Колгуев, независимо от того, что приходит в API
+            const map = 'Колгуев';
+            const version = details.version || 'Arma Reforger';
+            const ip = attributes.ip || '85.175.218.241';
+            const port = attributes.port || '2001';
+            
+            return {
+                online: attributes.players,
+                maxPlayers: attributes.maxPlayers,
+                freeSlots: attributes.maxPlayers - attributes.players,
+                map: map,
+                version: version,
+                isOnline: isOnline,
+                ip: ip,
+                port: port
+            };
+        }
+        
+        // Функция обновления статуса сервера
+        async function updateServerStatus() {
+            const refreshButton = document.getElementById('refresh-status');
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            
+            // Показываем состояние загрузки
+            refreshButton.classList.add('loading');
+            statusDot.style.backgroundColor = '#FFD700'; // Желтый - загрузка
+            statusText.textContent = 'ОБНОВЛЕНИЕ...';
+            statusText.style.color = '#FFD700';
+            
+            try {
+                // Получаем данные с BattleMetrics
+                const battleMetricsData = await fetchServerData();
+                
+                // Парсим данные
+                const serverData = parseBattleMetricsData(battleMetricsData);
+                
+                // Обновляем данные на странице
+                document.getElementById('online-count').textContent = serverData.online;
+                document.getElementById('max-players').textContent = serverData.maxPlayers;
+                document.getElementById('free-slots').textContent = serverData.freeSlots;
+                document.getElementById('server-map').textContent = serverData.map; // Всегда будет "Колгуев"
+                document.getElementById('server-version').textContent = serverData.version;
+                document.getElementById('server-ip').textContent = serverData.ip;
+                document.getElementById('server-port').textContent = serverData.port;
+                
+                // Обновляем статус
+                if (serverData.isOnline) {
+                    statusDot.classList.remove('offline');
+                    statusDot.style.backgroundColor = '#00FF00';
+                    statusText.textContent = 'ОНЛАЙН';
+                    statusText.classList.remove('offline');
+                    statusText.style.color = '#00FF00';
+                } else {
+                    statusDot.classList.add('offline');
+                    statusDot.style.backgroundColor = '#FF0000';
+                    statusText.textContent = 'ОФФЛАЙН';
+                    statusText.classList.add('offline');
+                    statusText.style.color = '#FF0000';
+                }
+                
+                console.log('Статус сервера обновлен:', serverData);
+                
+            } catch (error) {
+                console.error('Ошибка при обновлении статуса сервера:', error);
+                
+                // Обновляем статус
+                statusDot.classList.add('offline');
+                statusDot.style.backgroundColor = '#FF0000';
+                statusText.textContent = 'ОШИБКА';
+                statusText.classList.add('offline');
+                statusText.style.color = '#FF0000';
+                
+            } finally {
+                // Убираем состояние загрузки
+                refreshButton.classList.remove('loading');
+            }
+        }
+        
+        // Таймер для автоматического обновления (каждые 30 секунд)
+        let updateInterval;
+        
+        function startAutoUpdate() {
+            // Останавливаем предыдущий интервал, если он был
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+            
+            updateInterval = setInterval(() => {
+                updateServerStatus();
+            }, 30000); // 30 секунд
+        }
+        
+        // Обработчик кнопки обновления
+        document.getElementById('refresh-status').addEventListener('click', () => {
+            updateServerStatus();
+        });
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            // Первоначальное обновление
+            updateServerStatus();
+            
+            // Запуск автоматического обновления
+            startAutoUpdate();
+        });
+        
+        // Очистка интервала при закрытии страницы
+        window.addEventListener('beforeunload', () => {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        });
+        
+        // Дополнительно: обновление при возвращении на вкладку
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                // Если вкладка снова стала активной, обновляем данные
+                updateServerStatus();
+            }
+        });
+    </script>
+</body>
+</html>
